@@ -13,4 +13,4 @@ Install nodejs 14 or newere LTS edition and install taiko.
 
 ## To view in lightbox
 
-Run apache2 or any web server from this folder and open the page in the browser.
+Open index.html in a browser.
