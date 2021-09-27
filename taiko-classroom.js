@@ -11,14 +11,14 @@ const assert = require('assert').strict;
         await press("Enter");
         waitFor(async () => (await text('This week').exists()))
 
-        // await click("No due date");
-        // await click("No due date");
         if (await $('//*[@id="THIS_WEEK"]/div[2]').exists()) {
             await screenshot($('//*[@id="THIS_WEEK"]/div[2]'), { path: 'assignedThisWeek.png' });
         } else {
             await click("This week");
             if (await $('//*[@id="THIS_WEEK"]/div[2]').exists()) {
                 await screenshot($('//*[@id="THIS_WEEK"]/div[2]'), { path: 'assignedThisWeek.png' });
+            } else {
+                await screenshot(text("This week"), { path: 'assignedThisWeek.png' });
             }
         }
 
@@ -28,6 +28,8 @@ const assert = require('assert').strict;
             await click("Next week")
             if (await $('//*[@id="NEXT_WEEK"]/div[2]').exists()) {
                 await screenshot($('//*[@id="NEXT_WEEK"]/div[2]'), { path: 'assignedNextWeek.png' });
+            } else {
+                await screenshot(text("Next week"), { path: 'assignedNextWeek.png' });
             }
         }
 
@@ -38,6 +40,8 @@ const assert = require('assert').strict;
             await click("Missing")
             if (await $('//*[@id="THIS_WEEK"]/div[2]').exists()) {
                 await screenshot($('//*[@id="THIS_WEEK"]/div[2]'), { path: 'missingThisWeek.png' });
+            } else {
+                await screenshot(text("This week"), { path: 'missingThisWeek.png' });
             }
         }
 
@@ -47,15 +51,11 @@ const assert = require('assert').strict;
             await click("Last week")
             if (await $('//*[@id="LAST_WEEK"]/div[2]').exists()) {
                 await screenshot($('//*[@id="LAST_WEEK"]/div[2]'), { path: 'missingLastWeek.png' });
+            } else {
+                await screenshot(text("Last week"), { path: 'missingLastWeek.png' });
             }
         }
 
-        if (await $('//*[@id="EARLIER"]/div[2]').exists()) {
-            await screenshot($('//*[@id="EARLIER"]/div[2]'), { path: 'missingEarlier.png' });
-        } else {
-            await click("Earlier")
-            await screenshot($('//*[@id="EARLIER"]/div[2]'), { path: 'missingEarlier.png' });
-        }
     } catch (error) {
         await screenshot();
         console.error(error);
