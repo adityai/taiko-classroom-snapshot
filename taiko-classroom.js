@@ -6,23 +6,56 @@ const assert = require('assert').strict;
         await openBrowser();
         await goto("https://classroom.google.com/u/2/a/not-turned-in/all");
         await write(process.env.CLASSROOM_USER, into("Email or phone"));
-        await click("Next");
+        await press("Enter");
         await write(process.env.CLASSROOM_PASSWORD, into("Enter your password"));
-        await click("Sign in");
+        await press("Enter");
         waitFor(async () => (await text('This week').exists()))
 
-        await click("No due date")
-        await click("This week")
-        await screenshot({ path: 'assignedThisWeek.png', fullPage: true });
-        await click("Next week")
-        await screenshot({ path: 'assignedNextWeek.png', fullPage: true });
+        // await click("No due date");
+        // await click("No due date");
+        if (await $('//*[@id="THIS_WEEK"]/div[2]').exists()) {
+            await screenshot($('//*[@id="THIS_WEEK"]/div[2]'), { path: 'assignedThisWeek.png' });
+        } else {
+            await click("This week");
+            if (await $('//*[@id="THIS_WEEK"]/div[2]').exists()) {
+                await screenshot($('//*[@id="THIS_WEEK"]/div[2]'), { path: 'assignedThisWeek.png' });
+            }
+        }
 
-        await click("Missing")
-        await screenshot({ path: 'missingThisWeek.png', fullPage: true });
-        await click("Last week")
-        await screenshot({ path: 'missingLastWeek.png', fullPage: true });
-        await click("Earlier")
-        await screenshot({ path: 'missingEarlier.png', fullPage: true });
+        if (await $('//*[@id="NEXT_WEEK"]/div[2]').exists()) {
+            await screenshot($('//*[@id="NEXT_WEEK"]/div[2]'), { path: 'assignedNextWeek.png' });
+        } else {
+            await click("Next week")
+            if (await $('//*[@id="NEXT_WEEK"]/div[2]').exists()) {
+                await screenshot($('//*[@id="NEXT_WEEK"]/div[2]'), { path: 'assignedNextWeek.png' });
+            }
+        }
+
+        await click("Missing");
+        if (await $('//*[@id="THIS_WEEK"]/div[2]').exists()) {
+            await screenshot($('//*[@id="THIS_WEEK"]/div[2]'), { path: 'missingThisWeek.png' });
+        } else {
+            await click("Missing")
+            if (await $('//*[@id="THIS_WEEK"]/div[2]').exists()) {
+                await screenshot($('//*[@id="THIS_WEEK"]/div[2]'), { path: 'missingThisWeek.png' });
+            }
+        }
+
+        if (await $('//*[@id="LAST_WEEK"]/div[2]').exists()) {
+            await screenshot($('//*[@id="LAST_WEEK"]/div[2]'), { path: 'missingLastWeek.png' });
+        } else {
+            await click("Last week")
+            if (await $('//*[@id="LAST_WEEK"]/div[2]').exists()) {
+                await screenshot($('//*[@id="LAST_WEEK"]/div[2]'), { path: 'missingLastWeek.png' });
+            }
+        }
+
+        if (await $('//*[@id="EARLIER"]/div[2]').exists()) {
+            await screenshot($('//*[@id="EARLIER"]/div[2]'), { path: 'missingEarlier.png' });
+        } else {
+            await click("Earlier")
+            await screenshot($('//*[@id="EARLIER"]/div[2]'), { path: 'missingEarlier.png' });
+        }
     } catch (error) {
         await screenshot();
         console.error(error);
